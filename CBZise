@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+Pictures="$(realpath "$1" 2>/dev/null)"
+temporary=".temp$(echo $$)"
+
+if [[ -z "$Pictures" ]]; then 
+    echo "No Directory Provided"
+    exit
+else
+    temporary=".temp$(echo $$)"
+fi
+if [ -d "$Pictures" ]; then
+    echo "Compressing to CBZ: $Pictures"
+    cd "$Pictures"
+    mkdir $temporary
+    
+    for file in "$Pictures"/*; do 
+        if [[ -f "$file" ]]; then
+        mv "$file" "$Pictures"/$temporary/"$(basename "$file" 2>/dev/null)"
+        fi
+    done
+
+    Package="$(basename "$Pictures" 2>/dev/null).cbz"
+    cd "$Pictures"/$temporary && tar --no-recursion -cvf "$Package" ./*
+    mv "$Package" "$Pictures"/"$Package"
+    rm -rf "$Pictures"/$temporary
+
+
+fi

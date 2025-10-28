@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+
+Pictures="$(realpath "$1" 2>/dev/null)"
+temporary=".temp$(echo $$)"
+
+if [[ -z "$Pictures" ]]; then 
+    echo "No Directory Provided"
+    exit
+fi
+
+for subdirectory in "$Pictures"/*; do 
+    if [[ -d $subdirectory ]]; then
+        echo "$subdirectory"
+        ./CBZise "$subdirectory"
+    fi
+done
